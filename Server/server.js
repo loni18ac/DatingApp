@@ -5,21 +5,15 @@ const app = express()
 const port = 4000
 //vi vælger port 4000, vi kunne også vælge fx 5000
 
-app.set('view engine', 'ejs');
+var router = require('./Routes/router')
+
+app.use('/routes', router)
+
 
 app.get('/', (req,res) => {
-    res.sendFile(__dirname + '/Views/index.html');
-});
+    res.sendFile(__dirname + '/Client/Views/index.html');
+})
 
-/*
-app.get('/createAccount', (req,res) => {
-  res.sendFile(__dirname + '/Views/createAccount.html');
-});
-*/
-app.get('/profile/:id', (req,res) => {
-  res.render('profile');
-});
-//sender tilhørende fil for specifik profil med et givent ID
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
