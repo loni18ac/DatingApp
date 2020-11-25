@@ -6,23 +6,23 @@
 <body>
  
     <h1>Sign up and find your true love</h1>
-      <!--<table id="personProfile">
+      <table id="datingUser">
           <thead>
               <th>Name</th>
               <th>Value</th>
           </thead>
           <tbody>
           </tbody>
-      </table>-->
+      </table>
 
       <form>
-          <input type="text" id="firstname" placeholder="Firstname">
-          <input type="text" id="lastname" placeholder="Lastname">
+          <input type="text" id="fname" placeholder="Firstname">
+          <input type="text" id="lname" placeholder="Lastname">
           <input type="email" id="email" placeholder="Email">
           <input type="text" id="birthday" placeholder="Birthday">
           <input type="text" id="gender" placeholder="Gender">
           <input type="password" id="password" placeholder="Password">
-          <button type="submit" class="btn btn-default"><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/myAccount.html" style="color:dodgerblue">Submit</a></button>
+          <button type="submit" value="Send data" onClick="storeData()" class="btn btn-default"><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/myAccount.html" style="color:dodgerblue">Submit</a></button>
           <form id="fileform">
               <input type="file" value="file" id="file" name="file" onchange="uploadfile()">
           </form>
@@ -52,7 +52,7 @@
     //min localestorage
     localStorage.setItem("New User",[user.name, user.lastName, user.Birthday, user.Gender]);
     //Skal også kunne fjerne ting fra LS:
-    localStorage.clear("find ud af hvad man skal sige her")
+    //localStorage.clear("find ud af hvad man skal sige her")
   }
   </script>
   <script src="/Client/Views/scripts.js"></script>

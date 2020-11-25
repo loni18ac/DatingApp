@@ -16,10 +16,10 @@ class User {
 // We only want to do something when the dom is loaded
 document.addEventListener("DOMContentLoaded", function() {
     // Find the table
-    let table = document.getElementById("personProfile");
+    let table = document.getElementById("datingUser");
     let html = "";
 
-    // Get all the keys in our object
+    /*// Get all the keys in our object
     let objectKeys = Object.keys(henrik);
 
     // Loop through the keys in our array
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Construct the needed HTML for the table
         html += "<tr><td>" + objectKey + "</td><td>" + henrik[objectKey] + "</td></tr>";
     }
-
+*/
     // Set the table with the updated HTML
     table.innerHTML = html;
 
