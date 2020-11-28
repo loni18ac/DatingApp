@@ -1,59 +1,66 @@
 <html>
 <head>
   <title>Create Account</title>
-  
 </head>
 <body>
  
     <h1>Sign up and find your true love</h1>
-      <table id="datingUser">
-          <thead>
-              <th>Name</th>
-              <th>Value</th>
-          </thead>
-          <tbody>
-          </tbody>
-      </table>
-
       <form>
-          <input type="text" id="fname" placeholder="Firstname">
-          <input type="text" id="lname" placeholder="Lastname">
-          <input type="email" id="email" placeholder="Email">
-          <input type="text" id="birthday" placeholder="Birthday">
-          <input type="text" id="gender" placeholder="Gender">
-          <input type="password" id="password" placeholder="Password">
-          <button type="submit" value="Send data" onClick="storeData()" class="btn btn-default"><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/myAccount.html" style="color:dodgerblue">Submit</a></button>
-          <form id="fileform">
-              <input type="file" value="file" id="file" name="file" onchange="uploadfile()">
-          </form>
-          
+          <input type="text" id="fname" placeholder="Fullname" required>
+          <input type="email" id="email" placeholder="Email" required>
+          <input type="text" id="birthday" placeholder="Birthday" required>
+          <input type="text" id="gender" placeholder="Gender" required>
+          <input type="password" id="password" placeholder="Password" required>
+          <button type="submit" value="Send data" onClick="storeData()" class="btn btn-default"><a href="myAccount.html" style="color:dodgerblue">Submit</a></button>
       </form>
-      <!--<div id="message"></div>
-
-      <div id="Callback">
-          <input type="button" value="Contact API" id="apiButton">
-      </div> -->
 </body>
 
 <!-- Skal gemme i local storage, derfor:-->
 <script>
   function storeData() {
     let fname = document.getElementById("fname").value;
+    let mail = document.getElementById("email").value;
+    let birthday = document.getElementById("birthday").value;
+    let gender = document.getElementById("gender").value;
+    let password = document.getElementById("password").value;
+
+    let  user = {
+        name: fname,
+        Mail: mail,
+        birthday: birthday,
+        Gender: gender, 
+        password: password,  }
+      
+ 
+        var value = JSON.stringify([user.name, user.Mail, user.birthday, user.Gender, user.password]);
+        localStorage.setItem("newUser", value);
+        var createdUser = JSON.parse(localStorage.getItem("newUser"));
+        //createdUser.push(new User (user.name, user.lastName, user.Birthday, user.Gender, user.Mail));
+        var addUser = JSON.stringify(createdUser);
+        localStorage.setItem("newUser_"+fname, JSON.stringify(user));
+            };
+ 
+
+  /*function storeData() {
+    let fname = document.getElementById("fname").value;
     let lname = document.getElementById("lname").value;
-    let bdaymonth = document.getElementById("birthday").value;
+    let birthday = document.getElementById("birthday").value;
     let gender = document.getElementById("gender").value;
     //så jeg kan oprette min key, med efterfølgende value af array
     let user = {
-        name: fname,
+        firstName: fname,
         lastName: lname,
-        Birthday: bdaymonth,
-        Gender: gender 
+        Birthday: birthday,
+        Gender: gender,
     }
     //min localestorage
-    localStorage.setItem("New User",[user.name, user.lastName, user.Birthday, user.Gender]);
+    localStorage.setItem("New User", [user.firstName, user.lastName, user.Birthday, user.Gender]);
+
+    let data = localStorage.getItem('New User');
     //Skal også kunne fjerne ting fra LS:
     //localStorage.clear("find ud af hvad man skal sige her")
-  }
-  </script>
-  <script src="/Client/Views/scripts.js"></script>
+    localStorage.removeItem("New User"); }*/
+
+</script>
+
 </html>

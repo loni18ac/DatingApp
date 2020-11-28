@@ -2,24 +2,27 @@ const express = require('express')
 //Vi importerer express
 const app = express()
 //server sættes til at kalde på express
-const port = 4000
+const port = 8080
 //vi vælger port 4000, vi kunne også vælge fx 5000
 
 var router = require('./Routes/router')
 
-app.use('/routes', router)
-
+app.use('/routes/router.js', router)
 
 app.get('/', (req,res) => {
-    res.sendFile(__dirname + '/Client/Views/index.html');
+    res.sendFile('C:/Users/Louise Skjelborg/Desktop/Programmering/DatingApp/Client/Views/index.html');
+})
+
+app.get('/Client/Views/createAccount.html', (req,res) => {
+    res.sendFile('C:\Users\Louise Skjelborg\Desktop\Programmering\DatingApp\Client\Views\createAccount.html');
 })
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)
 })
 
-
-/*//login controller nedenfor
+/*
+/login controller nedenfor
 function loginController(req, res) {
     //Normalt vil man kigge om password og brugernavn stemmer, men det springer vi over
     //normalt vil man gemme secret key et andet sted. 
@@ -28,6 +31,7 @@ function loginController(req, res) {
     res.json({
         token: token
     })
+    
 
 
 module.exports = loginController*/

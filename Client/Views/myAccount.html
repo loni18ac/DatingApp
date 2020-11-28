@@ -1,26 +1,58 @@
 <!DOCTYPE html>
 <head>
     <title>My account</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+</head>
 
 </head>
-<nav class="navbar navbar-inverse">
-<div class="container-fluid">
-  <ul class="nav navbar-nav">
-    <li class="active"><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/myAccount.html">My account</a></li>
-    <li><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/myMatches.html">My matches</a></li>
-    <li><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/explore.html">Explore new matches</a></li>
-    <li><a href="C:/Users/Louise%20Skjelborg/Desktop/Programmering/DatingApp/Client/Views/Settings.html">Settings</a></li>
-  </ul>
-</div>
+<nav>
+  <div class="topnav">
+      <a class="active" href="myAccount.html">My account</a>
+      <a href="myMatches.html">My matches</a>
+      <a href="explore.html">Explore new matches</a>
+      <a href="Settings.html">Settings</a>
+  </div>
 </nav>
 <body> 
-    <p><b>My account</b></p>
-
+    <p><b>My account</b></p> <br><br>
+    <p>Write something about yourself!</p>
+  <div class="container">
+    <input class="storage" type="text">
+    <p><b>My description:</b></p>
+    <p class="text" style="border-style: solid; width: 50%;">Text about me </p>
+    <button class="button">Save</button>
+  </div>
+  <p><b>Do you want to delete your account?</b></p>
+  <button type="reset" id="delete_data" value="Delete data" onclick="deleteData()" class="button">Forget me</button>
 </body>
+<script> 
+  var delete_data=document.getElementById("delete_data")
+  
+  delete_data.onclick = function () {
+    localStorage.removeItem("newUser")
+  }
+//Brugeren skal kunne opdatere sin profil
+  const storageInput = document.querySelector('.storage');
+  const text = document.querySelector('.text');
+  const button = document.querySelector('.button');
+  const storedInput = localStorage.getItem('textinput')
+  //if we have ls input, put it here (https://www.youtube.com/watch?v=rVyTjFofok0)
+  if (storageInput) {
+    text.textContent = storedInput
+  }
 
+  storageInput.addEventListener('input', letter => {
+    text.textContent = letter.target.value
+    //sådan får vi den specifikke værdi i tekstboksen
+  })
+
+  //funktionen der gemmer stringen i ls 
+  const saveToLocalStorage = () => {
+    localStorage.setItem('textinput', text.textContent)
+  }
+//vi tager funktionen i brug ved denne eventListener
+  button.addEventListener('click', saveToLocalStorage)
+</script>
 </html>
