@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>My matches</title>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="styles.css">
@@ -12,23 +13,112 @@
       <a href="myAccount.html">My account</a>
       <a class="active" href="myMatches.html">My matches</a>
       <a href="explore.html">Explore new matches</a>
-      <a href="Settings.html">Settings</a>
   </div>
   </nav>
     <body>
         <p>My matches</p>
+        <div>
+            <ul>
+                <li><a class="like" href='#' data-name="Mikkel" data-gender="Male" data-age="23">Mikkel 23 år</a></li>
+                <li><a class="like" href='#' data-name="Frederik" data-gender="Male" data-age="21">Frederik 22 år</a></li>
+                <li><a class="like" href='#' data-name="Sara" data-gender="Female" data-age="23">Sara 25 år</a></li>
+                <li><a class="like" href='#' data-name="Ida" data-gender="Female" data-age="23">Ida 23 år</a></li>
+            </ul>
+            <button id="total-matches" onclick="totalMatches()">Se hvor mange matches, du har</button>
+        </div>
+
+        <div>
+            <ul id="show-matchList"></ul>
+        </div>
     </body>
 
     <script>
-        var matches = [];
-        var Match = function(name, gender, age) { //functions allow us to store code for later use
+        $(".like").click(function(event) {
+            event.preventDefault(); //prevent links from doing usual behavior e.g. the first hashtag
+            var name = $(this).attr("data-name");
+            var gender = $(this).attr("data-gender");
+            var age = $(this).attr("data-age");
+
+            likeUser(name, gender, age);
+            displayMatches();
+        });
+
+        function displayMatches() {
+            var matchArray = listMatches ();
+            var output = "";
+            for (var i in matchArray) {
+                output += "<li>"+matchArray[i].name+"</li>"
+            }
+            $("#show-matchList").html(output);
+        }
+        //*************************************************************
+        //Match functions
+        var matchList = [];
+        class User {
+            constructor (name, gender, age) { //functions allow us to store code for later use
             this.name = name
             this.gender = gender
             this.age = age
-        };
-        var a = new Match //{name:"", gender:"", age:0}
-        //a = instans af Match
-        matches.push(new Match);
+        }};
+        class freeUser extends User {
+            constructor(name, gender, age) {
+                super(name, gender, age)
+            }
+        }
+        let Julie = new freeUser(Julie, female, 25);
+        let Adam = new freeUser(Adam, male, 29)
         
+        /*var a = new Match //{name:"", gender:"", age:0}
+        //a = instans af Match
+        matches.push(new Match);*/
+
+        function likeUser(name, gender, age) {
+            var user = new User(name, gender, age)
+            matchList.push(User)
+            saveMatch();
+        }
+        /*likeMatch("Siri", "female", 23);
+        likeMatch("No", "male", 34)
+
+        console.log(matches);
+*/
+        function removeMatch(name) {
+            for (var i in matchList) {
+                if (matchList[i].name === name) {
+                    matchList.splice(i, 1); //if name matches request, index x and amount 1 will be removed
+                    return "Match removed"
+                }
+            }
+            saveMatch();
+        }
+        
+        function totalMatches() {
+            return matchList.length;
+        }
+        
+
+        function listMatches() { //-> array of matches
+            var matchListCopy = [];
+            for (var i in matchList) {
+                var match = matchList[i];
+                var matchCopy = {};
+                for (var p in match) {
+                    matchCopy[p] = match[p]
+                }
+                matchListCopy.push(matchCopy);
+            }
+            return matchListCopy;
+            //https://www.youtube.com/watch?v=MTY-84b8fik&list=PLoN_ejT35AEhzNoPStBzAkpqAu3YQwPj7&index=12
+        }
+
+        function saveMatch() { //-> Local storage
+            localStorage.setItem("matchList", JSON.stringify(matchList));
+        }
+        
+        function loadMatches() {//-> looks for matches in local storage
+            listMatches = JSON.parse(localStorage.getItem("matchList"));
+        }
+
+
     </script>
 </html>

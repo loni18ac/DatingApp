@@ -1,21 +1,25 @@
-const express = require('express')
+const express = require('express');
 //Vi importerer express
-const app = express()
+const app = express();
 //server sættes til at kalde på express
-const port = 8080
+const port = 8080;
 //vi vælger port 4000, vi kunne også vælge fx 5000
 
-var router = require('./Routes/router')
+var router = require('./Routes/router');
 
-app.use('/routes/router.js', router)
+app.use('/routes/router.js', router);
 
 app.get('/', (req,res) => {
     res.sendFile('C:/Users/Louise Skjelborg/Desktop/Programmering/DatingApp/Client/Views/index.html');
-})
+});
 
 app.get('/Client/Views/createAccount.html', (req,res) => {
     res.sendFile('C:\Users\Louise Skjelborg\Desktop\Programmering\DatingApp\Client\Views\createAccount.html');
-})
+});
+
+app.post('/createAccountHere', (req,res) => {
+    console.log(req.body); //body/formen er objektet, som vi får ind. Vi skal installere body.parser, for at få det som JSON format
+});
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`)

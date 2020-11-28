@@ -5,16 +5,16 @@
 <body>
  
     <h1>Sign up and find your true love</h1>
-      <form>
-          <input type="text" id="fname" placeholder="Fullname" required>
-          <input type="email" id="email" placeholder="Email" required>
-          <input type="text" id="birthday" placeholder="Birthday" required>
-          <input type="text" id="gender" placeholder="Gender" required>
-          <input type="password" id="password" placeholder="Password" required>
+      <form action="/createAccountHere" method="POST"> <!--post request, da brugeren submitter-->
+          <input type="text" id="fullname" placeholder="Fullname" name="fullname" required>
+          <input type="email" id="email" placeholder="Email" name="email" required>
+          <input type="text" id="birthday" placeholder="Birthday" name="birthday" required>
+          <input type="text" id="gender" placeholder="Gender" name="gender" required>
+          <input type="password" id="password" placeholder="Password" name="password" required>
           <button type="submit" value="Send data" onClick="storeData()" class="btn btn-default"><a href="myAccount.html" style="color:dodgerblue">Submit</a></button>
       </form>
 </body>
-
+<!--vi bruger name til at fetch name af input-->
 <!-- Skal gemme i local storage, derfor:-->
 <script>
   function storeData() {
