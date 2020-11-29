@@ -8,15 +8,16 @@
       <form action="/createAccountHere" method="POST"> <!--post request, da brugeren submitter-->
           <input type="text" id="fullname" placeholder="Fullname" name="fullname" required>
           <input type="email" id="email" placeholder="Email" name="email" required>
-          <input type="text" id="birthday" placeholder="Birthday" name="birthday" required>
+          <input type="number" id="age" placeholder="Age" name="age" required>
           <input type="text" id="gender" placeholder="Gender" name="gender" required>
           <input type="password" id="password" placeholder="Password" name="password" required>
-          <button type="submit" value="Send data" onClick="storeData()" class="btn btn-default"><a href="myAccount.html" style="color:dodgerblue">Submit</a></button>
+          <button type="submit" value="Send data" style="color:dodgerblue">Submit</a></button>
       </form>
+      <!--onClick="storeData()" class="btn btn-default"><a href="myAccount.html"-->
 </body>
 <!--vi bruger name til at fetch name af input-->
 <!-- Skal gemme i local storage, derfor:-->
-<script>
+<!--<script>
   function storeData() {
     let fname = document.getElementById("fname").value;
     let mail = document.getElementById("email").value;
@@ -62,5 +63,5 @@
     localStorage.removeItem("New User"); }*/
 
 </script>
-
+-->
 </html>
