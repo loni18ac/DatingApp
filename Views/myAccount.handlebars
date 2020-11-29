@@ -12,7 +12,14 @@
   </div>
 </nav>
 <body>
-  <section class="container content-section">
+  <div class="card" style="width: 18rem;">
+  <img src="{{user.image}}" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{user.fullname}}</h5>
+    <p class="card-text">{{user.email}}</p>
+  </div> <!--fra Bootstrap: https://getbootstrap.com/docs/4.5/components/card/-->
+</div>
+<!--  <section class="container content-section">
       <h2 class="section-header">Explore potential matches</h2>
       <div class="like-user">
           <div class="like-user">
@@ -123,6 +130,6 @@
   }
 //vi tager funktionen i brug ved denne eventListener
   button.addEventListener('click', saveToLocalStorage)
-</script>
+</script> -->
 
 </html>

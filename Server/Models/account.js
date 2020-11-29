@@ -23,3 +23,7 @@ const accountSchema = new Schema({
 
 module.exports = mongoose.model('Account', accountSchema) //vi kan blot skrive accountSchema, da vi allerede
 //har erklæret denne som en new Schema
+
+//match-funktion: lav likes og matches attributer som tomme arrays til user klassen. Sammenlign to brugeres attributter og tilføj disse til hinandens arrays
+
+//put alle funktioner der taler med klient og backend i controller mappen. Model-mappen taler sammen med databasen som et fjerde led
