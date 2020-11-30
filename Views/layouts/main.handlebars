@@ -1,39 +1,17 @@
 <html>
 <head>
   <title>Dating Universe</title>
-  <link rel="stylesheet" href="../public/styles.css">
-  <script src="../public/script.js"></script>
-</head>
-<body> 
-  {{{body}}}
-<div class="container">
-  <h3>Welcome</h3>
-  <p>Find your true love here</p>
-</div>
-<p>Login with email</p>
-  <form method="GET" action="/login">
-  {{#each success}}
-  <p>{{text}}</p>
-  {{/each}}
-  {{#each errors}}
-  <p>{{text}}</p>
-  {{/each}}
-  <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" class="form-control" placeholder="Email" required><br> <br>
-        </div>
-        <div class="form-group">
-        <label for"password">Password</label> 
-        <input type="password" name="password" id="password" placeholder="Password" class="form-control" required><br> <br>
-        </div>
-        <button type="submit" class="btn btn-primary btn-lg" style="color:dodgerblue">Login</button>
-        <input type="reset">
-        <!--<a href="/myAccount"-->
-        <!-- lav id som hentes med eventListener i js og derefter gemmes dette i ls-->
-      </form> 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-    <p>Don't have an account?</p>
-  <a href="/createAccount">Create account</a>
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+<body> <!-- hbs data binding expression-->
+  {{> navbar}}
+  {{{body}}}
 </body>
 
 </html>

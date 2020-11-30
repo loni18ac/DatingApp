@@ -6,7 +6,7 @@
     "configurations": [
         {
             "name": "Attach to Chrome",
-            "port": 6000,
+            "port": 7000,
             "request": "attach",
             "type": "pwa-chrome",
             "webRoot": "${workspaceFolder}"
@@ -15,7 +15,7 @@
             "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:6000",
+            "url": "http://localhost:7000",
             "webRoot": "${workspaceFolder}"
         }
     ]
