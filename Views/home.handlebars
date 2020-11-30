@@ -10,13 +10,13 @@
   <p>Find your true love here</p>
 </div>
 <p>Login with email</p>
-  <form method="POST" action="/createAccountHere">
  {{#each success}}
   <p>{{text}}</p>
   {{/each}}
   {{#each errors}}
   <p>{{text}}</p>
   {{/each}}
+  <form method="POST" action="/login">
   <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" name="email" id="email" class="form-control" placeholder="Email" required><br> <br>
@@ -25,7 +25,7 @@
         <label for"password">Password</label> 
         <input type="password" name="password" id="password" placeholder="Password" class="form-control" required><br> <br>
         </div>
-        <button type="submit" class="btn btn-primary btn-lg" style="color:dodgerblue">Login</button>
+        <button type="submit" class="btn btn-primary btn-lg">Login</button>
         <input type="reset">
         <!--<a href="/myAccount"-->
         <!-- lav id som hentes med eventListener i js og derefter gemmes dette i ls-->

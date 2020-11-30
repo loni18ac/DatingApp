@@ -1,4 +1,4 @@
-var express = require('express')
+/*var express = require('express')
 var router = express.Router()
 
 // middleware that is specific to this router
@@ -23,4 +23,4 @@ router.get('/profile', function (req, res) {
 router.get('/myAccount', function (req, res) {
   res.sendFile('C:/Users/Louise Skjelborg/Desktop/Programmering/DatingApp/Client/Views/myAccount.html')
 })
-module.exports = router
+module.exports = router*/

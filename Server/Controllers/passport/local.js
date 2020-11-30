@@ -1,6 +1,7 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const User = require('../Models/User.js')
+const User = require('../../Models/User');
+const bcrypt = require('bcryptjs');
 
 passport.serializeUser((user, done) => {
     done(null,user.id);
@@ -9,7 +10,7 @@ passport.serializeUser((user, done) => {
 //finder user i current user og tager id af user objekt
 
 passport.deserializeUser((id, done) => {
-    User.findByID(id,(err,user) => {
+    User.findById(id,(err,user) => {
         done(err,user);
     });
 });
@@ -19,14 +20,25 @@ passport.deserializeUser((id, done) => {
 
 passport.use(new LocalStrategy({
     usernameField: 'email',
-    passwordField: 'password',
-}, (email,password, done) => {
+    passwordField: 'password'
+}, (email, password, done) => {
     User.findOne({email:email})
     .then((user) => {
         if (!user) {
             return done(null,false);
         }
-    User.findOne({password:password})
+    bcrypt.compare(password, user.password, (isMatch) => {
+        if (isMatch) {
+            return done(null, user);
+        }
+        else {
+            return done(null,false);
+        }
+    })
+});
+}))
+
+    /*User.findOne({password:password})
     .then((user) => {
         if (!user) {
             return done(null,false);
@@ -34,5 +46,4 @@ passport.use(new LocalStrategy({
         else {
             return done(null,user);
         }
-    })
-});}))
+    })*/

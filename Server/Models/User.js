@@ -11,23 +11,28 @@ const userSchema = new Schema({
     fullname: {
         type: String
     },
-    image: {
-        type: String
-    },
     email: {
         type: String
     },
     age: {
         type: Number
     },
-    city: {
+    gender: {
         type: String
     },
+    about: {
+        type: String,
+        default: 'I am looking for love'
+    },
+
     online: {
         type: Boolean,
         default: false
     }, //vi sætter standard statusen til at brugeren ikke er online. 
     //den skal sættes til true, når brugeren er online.
+    password: {
+        type: String
+    }
 });
 
 module.exports = mongoose.model('User', userSchema);

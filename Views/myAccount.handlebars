@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <head>
     <title>My account</title>
     <meta charset="utf-8">
@@ -11,14 +11,33 @@
       <a class="active" href="myAccount.html">My account</a>
   </div>
 </nav>
-<body>
-  <div class="card" style="width: 18rem;">
-  <img src="{{user.image}}" class="card-img-top" alt="...">
+<body>-->
+  <!--<div class="card" style="width: 18rem;">
+  <img src="{{user.image}}" class="card-img-top" alt="...">-->
   <div class="card-body">
-    <h5 class="card-title">{{user.fullname}}</h5>
-    <p class="card-text">{{user.email}}</p>
+    <h5 class="card-title">Fullname: {{user.fullname}}</h5><br><br>
+     <p class="card-text">Age: {{user.age}}</p>
+     <p class="card-text">gender: {{user.gender}}</p>
+    <p class="card-text">Email: {{user.email}}</p>
+    <p class="card-text">About: {{user.about}}</p>
+    <br><br>
+    <hr><h5 onclick="updateProfile()">Edit your description!</h5></hr>
   </div> <!--fra Bootstrap: https://getbootstrap.com/docs/4.5/components/card/-->
 </div>
+
+<div id="editProfile">
+  <form action="/updateProfile" method="POST">
+  <div class="form-group">
+    <input type="text" name="about" id="about" value="{{user.about}}" class="form-control">  
+    </div>
+  <input type="submit">Save description</input>
+  </form>
+</div>
+<script src="Server\Models\User.js"></script>
+<script>
+  function updateProfile() {
+  }
+  </script>
 <!--  <section class="container content-section">
       <h2 class="section-header">Explore potential matches</h2>
       <div class="like-user">
@@ -130,6 +149,6 @@
   }
 //vi tager funktionen i brug ved denne eventListener
   button.addEventListener('click', saveToLocalStorage)
-</script> -->
+</script> 
 
-</html>
+</html>-->
