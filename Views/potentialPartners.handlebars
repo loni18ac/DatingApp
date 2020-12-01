@@ -1,0 +1,14 @@
+{{#each potentialPartners}}
+{{#if online}}
+<a href="/userProfile{{_id}}"></a>
+<h4>{{randomUser.fullname}}</h4>
+<a href="/likeUser/{{_id}}" style="color:rgb(206, 43, 70) ;"></a>
+{{else}}
+<a href="/userProfile{{_id}}"></a>
+<h4>{{randomUser.fullname}}</h4>
+<a href="/likeUser/{{_id}}" style="color:rgb(206, 43, 70) ;"></a>
+{{/if}}
+
+{{else}}
+<p>No users yet</p>
+{{/each}}

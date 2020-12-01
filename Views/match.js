@@ -1,4 +1,4 @@
-if (document.readyState == 'loading') {
+/*if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
 } else {
     ready()
@@ -100,4 +100,4 @@ function updateCartTotal() {
     }
     total = Math.round(total * 100) / 100
     document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total
-}
+}*/

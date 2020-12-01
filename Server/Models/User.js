@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+    _id: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
+
     fistname: {
         type: String
     },
@@ -27,7 +32,7 @@ const userSchema = new Schema({
 
     online: {
         type: Boolean,
-        default: false
+        default: true
     }, //vi sætter standard statusen til at brugeren ikke er online. 
     //den skal sættes til true, når brugeren er online.
     password: {

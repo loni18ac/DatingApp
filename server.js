@@ -26,17 +26,19 @@ const session = require('express-session');
 // Load models
 const Account = require('./Server/Models/account')
 const User = require('./Server/Models/User.js');
+const Match = require('./Server/Models/match');
 //referer til Account collection, altså der hvor vi sætter datatypen
 const flash = require('connect-flash');
 
 const bcrypt = require('bcryptjs');
 
-app.use(bodyParser.urlencoded({extended:false})) //vi vil kun have form data
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true})) //vi vil kun have form data
+
 
 //vi tager altså værdien i keys-MongoDB, som er linket til MongoDB. 
 //hvis det virker, udskrives 'Connected'
-mongoose.connect(Keys.MongoDB, { useUnifiedTopology: true }).then(() => {
+mongoose.connect(Keys.MongoDB, { useUnifiedTopology: true }, { useNewUrlParser: true }).then(() => {
     console.log('Connected bla bla');
 }).catch((err) => {
     console.log(err);
@@ -89,7 +91,7 @@ app.get('/', ensureGuest,(req,res) => {
 });
 app.get('/createAccount', ensureGuest, (req,res) => {
     res.render('createAccount', {
-        title: 'Contact'
+        title: 'Sign up'
     });
 });
 
@@ -111,7 +113,7 @@ app.post('/createdSuccessfully', (req,res) => {
         if (user) {
             let success = [];
             success.push({text: 'You are logged in'});
-            res.render('home', {
+            res.render('myAccount', {
                 title: 'Sign in',
                 success: success
             });
@@ -122,18 +124,19 @@ app.post('/createdSuccessfully', (req,res) => {
 
 app.post('/login', passport.authenticate('local', {
     successRedirect:'/myAccount',
-    failurRedirect: '/loginErrors'
+    failureRedirect: '/loginErrors'
 }));
 app.get('/loginErrors', (req,res) => {
     let errors = [];
     errors.push({text:'User not found or password/email incorrect'});
-    res.render('home', {
+    res.render('myAccount', {
         errors:errors
     });
 });
 
-app.get('/myAccount', requireLogin, (req, res) => {
-    User.findById({_id:req.user._id}).then((user) => {
+app.get('/myAccount', (req, res) => {
+    User.findById({_id:req.user._id})
+    .then((user) => {
         if (user) {
             user.online = true;
             user.save((err, user) => {
@@ -146,7 +149,30 @@ app.get('/myAccount', requireLogin, (req, res) => {
         }
     });
 }})});
+//Get route to match
+app.get('/likeUser/:id', (req,res) => {
+    const newMatch = {
+        sender: req.user_id,
+        receiver: req.params.id,
+        senderSent: true
+    }
+    new Match(newMatch).save((err, match) => {
+        if (err) {
+            throw err;
+        }
+        if (match) {
+        res.redirect(`/userProfile/${req.params.id}`);
+        }
+    })
+})
 
+//Get route til delete match
+app.get('/deleteMatch/:id', requireLogin, (req, res) => {
+    Match.deleteOne({receiver:req.params.id,sender:req.user._id})
+    .then(() => {
+        res.redirect(`/userProfile/${req.params.id}`);
+    });
+});
 app.post('/updateProfile', (req, res) => {
     User.findById({_id:req.user._id})
     .then((user) => {
@@ -156,8 +182,36 @@ app.post('/updateProfile', (req, res) => {
         })
     });
 })
+app.get('/deleteAccount', (req,res) => {
+    User.deleteOne({_id:req.user._id})
+    .then(() => {
+        res.render('accountDeleted', {
+            title: 'Deleted'
+        });
+    });
+})
+app.get('/potentialPartners', (req,res) => {
+    User.find({},)
+    .then((potentialPartners) => {
+        res.render('potentialPartners', {
+            title: 'PotentialPartners',
+            potentialPartners:potentialPartners
+        })
+    }).catch((err) => {
+        console.log(err);
+    });
+});
+app.get('/userProfile/:id', (req,res) => {
+    User.findById({_id:req.params.id})
+    .then((user) => {
+        res.render(`/userProfile/${req.params.id}`, {
+            randomUser: user
+        })
+    })
+});
 
-app.get('/logout', (req, res) => {
+
+app.get('/logout', requireLogin, (req, res) => {
     User.findById({_id:req.user._id})
     .then((user) => {
         user.online = false;
