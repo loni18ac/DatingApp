@@ -27,23 +27,15 @@ passport.use(new LocalStrategy({
         if (!user) {
             return done(null,false);
         }
-    bcrypt.compare(password, user.password, (isMatch) => {
+        bcrypt.compare(password, user.password, function (err, isMatch) {
+            if (err) {
+         throw err;
+        }
         if (isMatch) {
             return done(null, user);
-        }
-        else {
-            return done(null,false);
-        }
-    })
-});
-}))
-
-    /*User.findOne({password:password})
-    .then((user) => {
-        if (!user) {
-            return done(null,false);
+        }else{
+            return done(null, false)
         } 
-        else {
-            return done(null,user);
-        }
-    })*/
+    }).catch((err) => {
+        console.log(err);
+    })})}))      

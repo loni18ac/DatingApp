@@ -7,12 +7,11 @@ const app = express();
 const port = 7000;
 //vi vælger port 4000, vi kunne også vælge fx 5000
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
-
 const bodyParser = require('body-parser');
 //use bodyparser as middleware. Vi bruger to properties af body parser: URL encoded og json method
 const mongoose = require('mongoose');
 //vi loader mongoose module vba. require method og vi assigner den som et variabel kaldet mongoose
-
+const passportLocalMongoose = require("passport-local-mongoose");
 //vi loader databasen
 const Keys = require('./database/keys');
 
@@ -32,6 +31,8 @@ const flash = require('connect-flash');
 
 const bcrypt = require('bcryptjs');
 
+const LocalStrategy = require('./Server/Controllers/passport/local');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true})) //vi vil kun have form data
 
@@ -42,7 +43,12 @@ mongoose.connect(Keys.MongoDB, { useUnifiedTopology: true }, { useNewUrlParser: 
     console.log('Connected bla bla');
 }).catch((err) => {
     console.log(err);
-})
+});
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
+//mongoose.connect("mongodb://localhost/auth_demo_app");
 //vi sætter op view engine med to argumenter: navnet og det view den skal require
 app.engine('handlebars', exphbs({handlebars: allowInsecurePrototypeAccess(Handlebars)}));
 app.set('view engine', 'handlebars');
@@ -57,6 +63,9 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+/*passport.use(new LocalStrategy(passport.authenticate()));
+passport.serializeUser(passport.serializeUser());
+passport.deserializeUser(passport.deserializeUser());*/
 app.use(flash());
 app.use((req,res, next) =>{
     res.locals.success_msg = req.flash('success_msg');
@@ -82,8 +91,6 @@ app.use((req, res, next) => {
 
 app.use('/routes/router.js', router);*/
 
-
-require('./Server/Controllers/passport/local');
 
 
 app.get('/', ensureGuest,(req,res) => {
@@ -122,7 +129,7 @@ app.post('/createdSuccessfully', (req,res) => {
 });
 //lav til JSON fil
 
-app.post('/login', passport.authenticate('local', {
+app.post('/login', passport.authenticate('passport-local', {
     successRedirect:'/myAccount',
     failureRedirect: '/loginErrors'
 }));
@@ -135,7 +142,7 @@ app.get('/loginErrors', (req,res) => {
 });
 
 app.get('/myAccount', (req, res) => {
-    User.findById({_id:req.user._id})
+    User.findOne({_id:req.user.id})
     .then((user) => {
         if (user) {
             user.online = true;
@@ -212,7 +219,7 @@ app.get('/userProfile/:id', (req,res) => {
 
 
 app.get('/logout', requireLogin, (req, res) => {
-    User.findById({_id:req.user._id})
+    User.findById({_id:req.user.id})
     .then((user) => {
         user.online = false;
         user.save((err, user) => {

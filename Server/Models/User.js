@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    _id: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
 
     fistname: {
         type: String
@@ -37,9 +33,24 @@ const userSchema = new Schema({
     //den skal sættes til true, når brugeren er online.
     password: {
         type: String
-    }
+    },
+   /* matches: [{
+        match: {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+    },
+        matchedUser: {
+            type: Boolean,
+            default: false
+        }
+     }]*/
 });
 
+
+module.exports.getUserById = function(id,callback)
+{
+  User.findById(id,callback);
+}
 module.exports = mongoose.model('User', userSchema);
 //userSchema har allerede nyt skema indkodet
 
