@@ -129,7 +129,7 @@ app.post('/createdSuccessfully', (req,res) => {
 });
 //lav til JSON fil
 
-app.post('/login', passport.authenticate('passport-local', {
+app.post('/login', passport.authenticate('local', {
     successRedirect:'/myAccount',
     failureRedirect: '/loginErrors'
 }));
