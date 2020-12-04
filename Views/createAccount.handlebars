@@ -1,0 +1,83 @@
+<html>
+<head>
+  <title>Create Account</title>
+</head>
+<body>
+    <h1>Sign up</h1>
+      <form action="/createdSuccessfully" method="POST"> <!--post request, da brugeren submitter-->
+          <div class="form-group">
+          <label for="fullname">Fullname</label>
+          <input type="text" class="form-control" id="fullname" placeholder="Enter fullname" name="fullname" required>
+          </div>
+          <div class= "form-group">
+          <label for="inputEmail">Email address</label>
+          <input type="email" class="form-control" id="inputEmail" placeholder="Email" name="email" required>
+          </div>
+          <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" class="form-control" id="age" placeholder="Age" name="age" required>
+          </div>
+          <div class="form-group">
+          <label for="gender">Gender</label>
+          <input type="text" class="form-control" id="gender" placeholder="Gender" name="gender" required>
+          </div>
+          <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-primary" value="Send data">Submit</a></button>
+      </form>
+      <!--onClick="storeData()" class="btn btn-default"><a href="myAccount.html"-->
+</body>
+<!--vi bruger name til at fetch name af input-->
+<!-- Skal gemme i local storage, derfor:-->
+<!--<script>
+  function storeData() {
+    let fname = document.getElementById("fname").value;
+    let mail = document.getElementById("email").value;
+    let birthday = document.getElementById("birthday").value;
+    let gender = document.getElementById("gender").value;
+    let password = document.getElementById("password").value;
+
+    let  user = {
+        name: fname,
+        Mail: mail,
+        birthday: birthday,
+        Gender: gender, 
+        password: password,  }
+      
+ 
+        var value = JSON.stringify([user.name, user.Mail, user.birthday, user.Gender, user.password]);
+        localStorage.setItem("newUser", value);
+        var createdUser = JSON.parse(localStorage.getItem("newUser"));
+        //createdUser.push(new User (user.name, user.lastName, user.Birthday, user.Gender, user.Mail));
+        var addUser = JSON.stringify(createdUser);
+        localStorage.setItem("newUser_"+fname, JSON.stringify(user));
+            };
+ 
+
+  /*function storeData() {
+    if mathid._matchid === matchid
+    return matches
+    let fname = document.getElementById("fname").value;
+    let lname = document.getElementById("lname").value;
+    let birthday = document.getElementById("birthday").value;
+    let gender = document.getElementById("gender").value;
+    //så jeg kan oprette min key, med efterfølgende value af array
+    let user = {
+        firstName: fname,
+        lastName: lname,
+        Birthday: birthday,
+        Gender: gender,
+    }
+    //min localestorage
+    localStorage.setItem("New User", [user.firstName, user.lastName, user.Birthday, user.Gender]);
+
+    let data = localStorage.getItem('New User');
+    //Skal også kunne fjerne ting fra LS:
+    //localStorage.clear("find ud af hvad man skal sige her")
+    localStorage.removeItem("New User"); }*/
+
+</script>
+-->
+</html>
