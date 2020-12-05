@@ -85,7 +85,7 @@ app.use((req, res, next) => {
 app.use('/routes/router.js', router);*/
 
 
-require('./Server/Controllers/passport/local');
+// require('./Server/Controllers/passport/local');
 
 
 app.get('/', ensureGuest,(req,res) => {
@@ -115,7 +115,7 @@ app.post('/createdSuccessfully', (req,res) => {
         if (user) {
             let success = [];
             success.push({text: 'You are logged in'});
-            res.render('/', {
+            res.render('home', {
                 title: 'Sign in',
                 success: success
             });
@@ -136,30 +136,30 @@ app.get('/loginErrors', (req,res) => {
     });
 });
 
-// app.get('/myAccount', (req, res) => {
-//     User.findById({_id:req.user._id})
-//     .then((user) => {
-//         if (user) {
-//             user.online = true;
-//             user.save((err, user) => {
-//                 if (err) {
-//                     throw err;
-//                 } else {
-//                     res.render('myAccount', {
-//                     user:user
-//             });
-//         }
-//     });
-// }})});
+app.get('/myAccount', (req, res) => {
+    User.findOne({email:'thomas@mail.dk'})
+    .then((user) => {
+        if (user) {
+            user.online = true;
+            user.save((err, user) => {
+                if (err) {
+                    throw err;
+                } else {
+                    res.render('myAccount', {
+                    user:user
+            });
+        }
+    });
+}})});
 
 app.post('/login', (req, res) => {
-    
     const { email, password } = req.body
     console.log(email)
     console.log(password)
     User.findOne({email: "thomas@mail.dk"})
+    //User.findOne({password: req.body.password})
     .then((user) => {
-        if (user) {
+        if (user) {    
             user.online = true;
             req.session.user = user
             console.log(user)
@@ -175,7 +175,24 @@ app.post('/login', (req, res) => {
 }})});
 
 //Get route to match
-app.get('/likeUser/:id', (req,res) => {
+app.get('/likeUser/Lagertha', (req,res) => {
+    User.findOne({email:'s@gmail.com'})
+    // .then((user) => {
+    //     User.findOne({email: 's@gmail.com'})
+        .then((user) => {
+            let newMatch = {
+                match: 's@gmail.com'
+            }
+            user.matches.push(newMatch)
+            user.save((err,user) => {
+                if (err) {
+                    throw err;
+                }
+                if (user) {
+                    res.json('You have liked this user')
+                }
+            })
+        })
     const newMatch = {
         sender: req.user_id,
         receiver: req.params.id,
@@ -234,13 +251,9 @@ app.get('/potentialPartners', (req,res) => {
         console.log(err);
     });
 });
-app.get('/userProfile/:id', (req,res) => {
-    User.findById({_id:req.params.id})
-    .then((user) => {
-        res.render(`/userProfile/${req.params.id}`, {
-            randomUser: user
-        })
-    })
+app.get('/profile', (req,res) => {
+        res.render('profile')
+
 });
 
 
@@ -270,6 +283,7 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
  console.log(`Server running on http://localhost:${port}`)});
 
+
 /*
 /login controller nedenfor
 function loginController(req, res) {
@@ -283,4 +297,4 @@ function loginController(req, res) {
     
 
 
-module.exports = loginController*/
+module.exports = loginController*/ 

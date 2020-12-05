@@ -1,103 +1,87 @@
-/*if (document.readyState == 'loading') {
+/*
+if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
 } else {
     ready()
 }
 
 function ready() {
-    var removeCartItemButtons = document.getElementsByClassName('btn-danger')
-    for (var i = 0; i < removeCartItemButtons.length; i++) {
-        var button = removeCartItemButtons[i]
-        button.addEventListener('click', removeCartItem)
+    var removeMatchButtons = document.getElementsByClassName('btn-danger')
+    for (var i = 0; i < removeMatchButtons.length; i++) {
+        var button = removeMatchButtons[i]
+        button.addEventListener('click', removeMatch)
     }
 
-    var quantityInputs = document.getElementsByClassName('cart-quantity-input')
-    for (var i = 0; i < quantityInputs.length; i++) {
-        var input = quantityInputs[i]
-        input.addEventListener('change', quantityChanged)
-    }
+    var likeButtons = document.getElementsByClassName('like-user-button')
+    for (var i = 0; i < likeButtons.length; i++) {
+        var button = likeButtons[i]
+        button.addEventListener('click', likeUserClicked)
 
-    var addToCartButtons = document.getElementsByClassName('like-user-button')
-    for (var i = 0; i < addToCartButtons.length; i++) {
-        var button = addToCartButtons[i]
-        button.addEventListener('click', addToCartClicked)
     }
-
-    document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+    var dislikeButtons = document.getElementsByClassName('dislike-user-button')
+    for (var i = 0; i < dislikeButtons.length; i++) {
+        var button = dislikeButtons[i]
+        button.addEventListener('click', dislikeUser)
+    }
 }
 
-function purchaseClicked() {
-    alert('Thank you for your purchase')
-    var cartItems = document.getElementsByClassName('cart-items')[0]
-    while (cartItems.hasChildNodes()) {
-        cartItems.removeChild(cartItems.firstChild)
-    }
-    updateCartTotal()
-}
 
-function removeCartItem(event) {
+function removeMatch(event) {
     var buttonClicked = event.target
-    buttonClicked.parentElement.parentElement.remove()
-    updateCartTotal()
+    buttonClicked.parentElement.parentElement.remove() 
 }
 
-function quantityChanged(event) {
-    var input = event.target
-    if (isNaN(input.value) || input.value <= 0) {
-        input.value = 1
-    }
-    updateCartTotal()
+function dislikeUser(event) {
+    var buttonClicked = event.target
+    buttonClicked.parentElement.remove()
 }
 
-function addToCartClicked(event) {
+
+function likeUserClicked(event) {
     var button = event.target
-    var shopItem = button.parentElement.parentElement
-    var title = shopItem.getElementsByClassName('like-user-title')[0].innerText
-    var price = shopItem.getElementsByClassName('like-user-price')[0].innerText
-    var imageSrc = shopItem.getElementsByClassName('like-user-image')[0].src
-    addItemToCart(title, price, imageSrc)
-    updateCartTotal()
+    var potentialPartner = button.parentElement.parentElement
+    var title = potentialPartner.getElementsByClassName('like-user-title')[0].innerText
+    var imageSrc = potentialPartner.getElementsByClassName('like-user-image')[0].src
+    likeUser(title, imageSrc)
+    alert('MATCH! Denne bruger har også liket dig!')
+    matchTotal()
 }
 
-function addItemToCart(title, price, imageSrc) {
-    var cartRow = document.createElement('div')
-    cartRow.classList.add('cart-row')
-    var cartItems = document.getElementsByClassName('cart-items')[0]
-    var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
-    for (var i = 0; i < cartItemNames.length; i++) {
-        if (cartItemNames[i].innerText == title) {
+function likeUser(title, imageSrc) {
+    var matchRow = document.createElement('div')
+    matchRow.classList.add('match-row')
+    var matchUsers = document.getElementsByClassName('match-users')[0]
+    var matchUserNames = matchUsers.getElementsByClassName('like-user-title')
+    for (var i = 0; i < matchUserNames.length; i++) {
+        if (matchUserNames[i].innerText == title) {
             alert('This item is already added to the cart')
             return
         }
     }
-    var cartRowContents = `
-        <div class="cart-item cart-column">
-            <img class="cart-item-image" src="${imageSrc}" width="100" height="100">
-            <span class="cart-item-title">${title}</span>
-        </div>
-        <span class="cart-price cart-column">${price}</span>
-        <div class="cart-quantity cart-column">
-            <input class="cart-quantity-input" type="number" value="1">
+    var matchRowContents = `
+        <div class="match-user match-column">
+            <img class="match-user-image" src="${imageSrc}" width="100" height="100">
+            <span class="match-user-title">${title}</span>
             <button class="btn btn-danger" type="button">REMOVE</button>
         </div>`
-    cartRow.innerHTML = cartRowContents
-    cartItems.append(cartRow)
-    cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeCartItem)
-    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
+    matchRow.innerHTML = matchRowContents
+    matchUsers.append(matchRow)
+    matchRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeMatch)
 }
 
-function updateCartTotal() {
-    var cartItemContainer = document.getElementsByClassName('cart-items')[0]
-    var cartRows = cartItemContainer.getElementsByClassName('cart-row')
+function matchTotal() {
+    var matchUsersContainer = document.getElementsByClassName('match-users')[0]
+    var matchRows = matchUsersContainer.getElementsByClassName('match-row')
     var total = 0
-    for (var i = 0; i < cartRows.length; i++) {
-        var cartRow = cartRows[i]
-        var priceElement = cartRow.getElementsByClassName('cart-price')[0]
-        var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
-        var price = parseFloat(priceElement.innerText.replace('$', ''))
-        var quantity = quantityElement.value
-        total = total + (price * quantity)
-    }
-    total = Math.round(total * 100) / 100
-    document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total
+    for (var i = 0; i < matchRows.length; i++) {
+        var matchRow = matchRows[i]
+        total = matchRows.length
+    } if (total > 0) {
+    document.getElementsByClassName('match-total-title')[0].innerText = 'You have ' + total + ' match(es). Wow, you rock!'
+}
 }*/
+/*
+function dislikeUser() {
+            document.getElementById("dislike").style.display = "none"; 
+
+    }*/

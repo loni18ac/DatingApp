@@ -34,16 +34,16 @@ const userSchema = new Schema({
     password: {
         type: String
     },
-   /* matches: [{
+    matches: [{
         match: {
-            type: Schema.Types.ObjectId,
+            type: Schema.Types.String,
             ref: 'User'
     },
         matchedUser: {
             type: Boolean,
             default: false
         }
-     }]*/
+     }]
 });
 
 
