@@ -33,17 +33,17 @@ const userSchema = new Schema({
     //den skal sættes til true, når brugeren er online.
     password: {
         type: String
-    },
+    },/*
     matches: [{
         match: {
-            type: Schema.Types.String,
+            type: Schema.Types.ObjectId,
             ref: 'User'
     },
         matchedUser: {
             type: Boolean,
             default: true
         }
-     }]
+     }]*/
 });
 /*
 

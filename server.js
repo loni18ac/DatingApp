@@ -170,7 +170,7 @@ app.post('/login', (req, res) => {
         }
     });
 }})});
-
+/*
 //Get route to match
 app.get('/likeUser/', (req,res) => {
     //User.findOne({email:req.params.email})
@@ -222,11 +222,11 @@ app.get('/likeBack/:email', (req,res) => {
     }).catch((err) => {
         console.log(err);
     })
-})
-
+})*/
+/*
 //My matches
 app.get('/myMatches', (req,res) => {
-    User.findOne({email:'thomas@mail.dk'})
+    User.findOne({_id:'5fca0549a495ed6c0870ea11'})
     .populate({
         path: "matches", //populate matches
         populate: {
@@ -234,12 +234,13 @@ app.get('/myMatches', (req,res) => {
         }
     })
     .then((user) => {
+        console.log('yeehaw')
         res.render('matches/myMatches', {
             title: 'Matches',
             userMatches: user
         })
     })
-});
+});*/
         /*
             let newMatch = {
                 match: 's@gmail.com'
@@ -361,4 +362,4 @@ function loginController(req, res) {
     
 
 
-module.exports = loginController*/ 
+module.exports = loginController*/
