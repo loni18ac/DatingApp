@@ -28,7 +28,7 @@ const userSchema = new Schema({
 
     online: {
         type: Boolean,
-        default: true
+        default: false
     }, //vi sætter standard statusen til at brugeren ikke er online. 
     //den skal sættes til true, når brugeren er online.
     password: {
@@ -41,16 +41,16 @@ const userSchema = new Schema({
     },
         matchedUser: {
             type: Boolean,
-            default: false
+            default: true
         }
      }]
 });
-
+/*
 
 module.exports.getUserById = function(id,callback)
 {
   User.findById(id,callback);
-}
+}*/
 module.exports = mongoose.model('User', userSchema);
 //userSchema har allerede nyt skema indkodet
 

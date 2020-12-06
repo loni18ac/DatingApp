@@ -13,7 +13,7 @@
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-            <a href="/myAccount">My Account <span class="sr-only"></span></a>
+            <a class="nav-link" href="/myAccount">My Account <span class="sr-only"></span></a>
       </li>
     
     </ul>
@@ -21,9 +21,32 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-        <a class="nav-link" href="/potentialPartners">Explore new and view existing matches<span class="sr-only"></span></a>
+        <a class="nav-link" href="/potentialMatches">Explore new and view existing matches<span class="sr-only"></span></a>
       </li>
     
     </ul>
   </div>
+
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+        <a class="nav-link" href="/myMatches">My matches<span class="sr-only"></span></a>
+      </li>
+    
+    </ul>
+  </div>
+
+    {{#each user}}
+
+    {{#each match}} 
+    <a class="navbar-brand" href="/showLike/{{match.email}}"></a>
+    <script>
+      document.getElementById('likeUserButton'.style.color = 'green')
+      </script>
+    {{#if matchedUser}}
+    {{else}}
+   
+    {{/if}}
+    {{/each}}
+    {{/each}}
 </nav>

@@ -52,8 +52,9 @@ app.set('view engine', 'handlebars');
 app.use(cookieParser());
 app.use(session({
    secret: 'mySecret',
-   resave: true,
-   saveUninitialized: true 
+   resave: false, //resaves session after every change
+   saveUninitialized: true //saves uninitialized objects in session, when they are assigned to the session
+   //https://morioh.com/p/33f73e7c1040
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -85,7 +86,7 @@ app.use((req, res, next) => {
 app.use('/routes/router.js', router);*/
 
 
-// require('./Server/Controllers/passport/local');
+require('./Server/Controllers/passport/local');
 
 
 app.get('/', ensureGuest,(req,res) => {
@@ -123,40 +124,36 @@ app.post('/createdSuccessfully', (req,res) => {
     })
 });
 //lav til JSON fil
-
-// app.post('/login', passport.authenticate('local', {
-//     successRedirect:'/myAccount',
-//     failureRedirect: '/loginErrors'
-// }));
+/*
+app.post('/login', passport.authenticate('local', {
+    successRedirect:'/myAccount',
+    failureRedirect: '/loginErrors'
+}));
 app.get('/loginErrors', (req,res) => {
     let errors = [];
     errors.push({text:'User not found or password/email incorrect'});
     res.render('myAccount', {
         errors:errors
     });
-});
+});*/
 
-app.get('/myAccount', (req, res) => {
+app.get('/myAccount',  (req, res) => {
     User.findOne({email:'thomas@mail.dk'})
     .then((user) => {
-        if (user) {
-            user.online = true;
-            user.save((err, user) => {
-                if (err) {
-                    throw err;
-                } else {
+        if (user.online = false) {
+            return res.status(401).send();
+        }else{
+            //user.online = true;
                     res.render('myAccount', {
                     user:user
             });
-        }
-    });
-}})});
-
+    }});
+});
 app.post('/login', (req, res) => {
     const { email, password } = req.body
     console.log(email)
     console.log(password)
-    User.findOne({email: "thomas@mail.dk"})
+    User.findOne({email: 'thomas@mail.dk'})
     //User.findOne({password: req.body.password})
     .then((user) => {
         if (user) {    
@@ -175,11 +172,75 @@ app.post('/login', (req, res) => {
 }})});
 
 //Get route to match
-app.get('/likeUser/Lagertha', (req,res) => {
-    User.findOne({email:'s@gmail.com'})
-    // .then((user) => {
-    //     User.findOne({email: 's@gmail.com'})
-        .then((user) => {
+app.get('/likeUser/', (req,res) => {
+    //User.findOne({email:req.params.email})
+    User.findOne({email: 'isla@gmail.com'}) //modtager account
+            .then((user) => {
+                let newLikeSent = {
+                    match: 'thomas@mail.dk'   //sender account, matchedUser: false
+                }
+                user.matches.push(newLikeSent)
+                //ikke liked back endnu
+                user.save((err, user) => {
+                    if (err) {
+                        throw err;
+                    }
+                    if (user) {
+                        res.render('matches/likeUser', {
+                            title: 'Like',
+                            newLike: user
+                        })
+                    }
+                });
+            });
+});   
+app.get('/showLike/:email', (req,res) => {
+    User.findOne({email:req.params.email})
+    .then((userRequest) => {
+        res.render('match/showLike', {
+            title: 'Like',
+            newFriend:userRequest
+        })
+    })
+});
+//like back route
+app.get('/likeBack/:email', (req,res) => {
+    User.findOne({email: 'thomas@mail.dk'})
+    .populate('matches.match')
+    .then((user) => {
+        user.matches.filter((match) => {
+            if (match.email = 'thomas@mail.dk') {
+                match.matchedUser = true;
+                user.save() 
+                .then(() => {
+                    res.send('You have a new match! This user liked you too')
+                })
+            }else {
+                console.log('Unable to')
+            }
+        })
+    }).catch((err) => {
+        console.log(err);
+    })
+})
+
+//My matches
+app.get('/myMatches', (req,res) => {
+    User.findOne({email:'thomas@mail.dk'})
+    .populate({
+        path: "matches", //populate matches
+        populate: {
+            path: "match" //i matches array, populate match
+        }
+    })
+    .then((user) => {
+        res.render('matches/myMatches', {
+            title: 'Matches',
+            userMatches: user
+        })
+    })
+});
+        /*
             let newMatch = {
                 match: 's@gmail.com'
             }
@@ -206,7 +267,7 @@ app.get('/likeUser/Lagertha', (req,res) => {
         res.redirect(`/userProfile/${req.params.id}`);
         }
     })
-})
+})*/
 
 //Get route til delete match
 app.get('/deleteMatch/:id', requireLogin, (req, res) => {
@@ -216,13 +277,14 @@ app.get('/deleteMatch/:id', requireLogin, (req, res) => {
     });
 });
 app.post('/updateProfile', (req, res) => {
-    User.findOne({email:"thomas@mail.dk"})
+    User.findOne({email:"isla@gmail.com"})
     .then((user) => {
+        if (user.online = true) {
         user.about = req.body.about;
         user.save(() => {
             res.json("Your description has been updated, please go back and refresh the page");
-        })
-    })
+        });
+    }});
 });
 app.get('/deleteAccount', (req,res) => {
     User.deleteOne({email:"thomas@mail.dk"})
@@ -240,17 +302,22 @@ app.get('/testSession', (req, res) => {
     console.log("req.session.user")
 })
 
-app.get('/potentialPartners', (req,res) => {
+app.get('/potentialMatches', (req,res) => {
     User.find({},)
-    .then((potentialPartners) => {
-        res.render('potentialPartners', {
-            title: 'PotentialPartners',
-            potentialPartners:potentialPartners
+    .then((potentialMatches) => {
+        res.render('potentialMatches', {
+            title: 'PotentialMatches',
+            potentialMatches:potentialMatches
         })
     }).catch((err) => {
         console.log(err);
     });
 });
+//like brugere route
+/*
+app.get('/likeUser/:id', requireLogin, (req,res) => {
+    User.findById({})
+} )*/
 app.get('/profile', (req,res) => {
         res.render('profile')
 
@@ -258,14 +325,13 @@ app.get('/profile', (req,res) => {
 
 
 app.get('/logout', (req, res) => {
-    const { email, password } = req.body
+    /*const { email, password } = req.body
     console.log(email)
-    console.log(password)
-    User.findOne({email: "thomas@mail.dk"})
+    console.log(password)*/
+    User.findOne({email: 'thomas@mail.dk'})
     .then((user) => {
-        if (user) {
             user.online = false;
-            req.session.destroy(user);
+            req.session.destroy();
             console.log(user)
         user.save((err, user) => {
             if (err) {
@@ -273,12 +339,10 @@ app.get('/logout', (req, res) => {
             }
             if (user) {
                 req.logout();
-                res.redirect('/');
+                res.render('logout');
             }       
         });
-    }});
-    req.logout();
-    res.redirect('/');
+    });
 });
 app.listen(port, () => {
  console.log(`Server running on http://localhost:${port}`)});
