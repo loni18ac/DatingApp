@@ -21,21 +21,22 @@
     <p class="card-text">Email: {{user.email}}</p>
     <p class="card-text">About: {{user.about}}</p>
     <br><br>
-    <hr><h5 onclick="updateProfile()">Edit your description!</h5></hr>
+    <hr><h5 onclick="updateProfile()" style="margin: 30px;">Edit your description!</h5></hr>
   </div> <!--fra Bootstrap: https://getbootstrap.com/docs/4.5/components/card/-->
 </div>
 
 <div id="editProfile">
-  <form action="/updateProfile" method="POST">
+  <form action="/updateProfile" method="POST" style="margin: 30px;">
   <div class="form-group">
     <input type="text" name="about" id="about" value="{{user.about}}" class="form-control">  
     </div>
-  <input type="submit">Save description</input>
+    Save description
+  <input type="submit"></input>
   </form>
 </div>
 
-<div id="deleteAccount">
-  <p>Do you want to delete your accout?</p>
+<div id="deleteAccount" style="margin: 30px;">
+  <p style="margin: 30px;">Do you want to delete your accout?</p>
   <a href="/deleteAccount"><button class="btn btn-danger">Yes</button></a>
 <!--
 <script>

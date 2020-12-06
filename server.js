@@ -115,7 +115,7 @@ app.post('/createdSuccessfully', (req,res) => {
         }
         if (user) {
             let success = [];
-            success.push({text: 'You are logged in'});
+            success.push({text: 'Account was created successfully!'});
             res.render('home', {
                 title: 'Sign in',
                 success: success
@@ -138,9 +138,9 @@ app.get('/loginErrors', (req,res) => {
 });*/
 
 app.get('/myAccount',  (req, res) => {
-    User.findOne({email:'thomas@mail.dk'})
+    User.findOne({email:'testPerson@mail.dk'})
     .then((user) => {
-        if (user.online = false) {
+        if (user.online != true) {
             return res.status(401).send();
         }else{
             //user.online = true;
@@ -153,7 +153,7 @@ app.post('/login', (req, res) => {
     const { email, password } = req.body
     console.log(email)
     console.log(password)
-    User.findOne({email: 'thomas@mail.dk'})
+    User.findOne({email: req.body.email})
     //User.findOne({password: req.body.password})
     .then((user) => {
         if (user) {    
@@ -222,8 +222,8 @@ app.get('/likeBack/:email', (req,res) => {
     }).catch((err) => {
         console.log(err);
     })
-})*/
-/*
+})
+
 //My matches
 app.get('/myMatches', (req,res) => {
     User.findOne({_id:'5fca0549a495ed6c0870ea11'})
@@ -278,17 +278,16 @@ app.get('/deleteMatch/:id', requireLogin, (req, res) => {
     });
 });
 app.post('/updateProfile', (req, res) => {
-    User.findOne({email:"isla@gmail.com"})
+    User.findOne({email: 'testPerson@mail.dk'})
     .then((user) => {
-        if (user.online = true) {
         user.about = req.body.about;
         user.save(() => {
             res.json("Your description has been updated, please go back and refresh the page");
         });
-    }});
+    });
 });
 app.get('/deleteAccount', (req,res) => {
-    User.deleteOne({email:"thomas@mail.dk"})
+    User.deleteOne({email: req.body.email})
     .then(() => {
         res.render('accountDeleted', {
             title: 'Deleted'
@@ -329,7 +328,7 @@ app.get('/logout', (req, res) => {
     /*const { email, password } = req.body
     console.log(email)
     console.log(password)*/
-    User.findOne({email: 'thomas@mail.dk'})
+    User.findOne({email: 'testPerson@mail.dk'})
     .then((user) => {
             user.online = false;
             req.session.destroy();

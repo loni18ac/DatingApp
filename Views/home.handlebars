@@ -7,14 +7,14 @@
   <h3>Welcome</h3>
   <p>Find your true love here</p>
 </div>
-<p>Login with email</p>
+<p style="margin: 30px;">Login with email</p>
  {{#each success}}
   <p>{{text}}</p>
   {{/each}}
   {{#each errors}}
   <p>{{text}}</p>
   {{/each}}
-  <form method="POST" action="/login">
+  <form method="POST" action="/login" style="margin: 30px;">
   <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" name="email" id="email" class="form-control" placeholder="Email" required><br> <br>
@@ -29,8 +29,9 @@
         <!-- lav id som hentes med eventListener i js og derefter gemmes dette i ls-->
       </form> 
 
-    <p>Don't have an account?</p>
-  <a href="/createAccount">Create account</a>
+    <p style="margin: 30px;">Don't have an account?</p>
+  <a style="margin: 30px" href="/createAccount" >Create account</a>
+  <br><br>.
 </body>
 
 </html>

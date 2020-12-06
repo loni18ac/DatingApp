@@ -33,7 +33,7 @@ const userSchema = new Schema({
     //den skal sættes til true, når brugeren er online.
     password: {
         type: String
-    },/*
+    },
     matches: [{
         match: {
             type: Schema.Types.ObjectId,
@@ -43,7 +43,7 @@ const userSchema = new Schema({
             type: Boolean,
             default: true
         }
-     }]*/
+     }]
 });
 /*
 
