@@ -1,3 +1,6 @@
+//Benyttes ikke i programmet, men er med til eventuel videreudvikling
+
+/*
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
@@ -25,3 +28,4 @@ const matchSchema = new Schema({
 });
 
 module.export = mongoose.model('Match', matchSchema);
+*/

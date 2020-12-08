@@ -20,13 +20,12 @@ const Keys = require('./database/keys');
 const {requireLogin, ensureGuest} = require('./helpers/auth');
 
 const passport = require('passport');
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 const session = require('express-session');
 //vi loader express session module med require og assigner den til session
 // Load models
-const Account = require('./Server/Models/account')
 const User = require('./Server/Models/User.js');
-const Match = require('./Server/Models/match');
+//const Match = require('./Server/Models/match');
 //referer til Account collection, altså der hvor vi sætter datatypen
 const flash = require('connect-flash');
 
@@ -47,15 +46,22 @@ mongoose.connect(Keys.MongoDB, { useUnifiedTopology: true }, { useNewUrlParser: 
 app.engine('handlebars', exphbs({handlebars: allowInsecurePrototypeAccess(Handlebars)}));
 app.set('view engine', 'handlebars');
 
+const SESS_NAME = 'DatingCookie'
+const SESS_LIFETIME = 1000 * 60 * 60 * 2
 
 //brugeren er logget ind så længe sessionen varer vba. cookie id
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use(session({
-   secret: 'mySecret',
-   resave: false, //resaves session after every change
-   saveUninitialized: true //saves uninitialized objects in session, when they are assigned to the session
-   //https://morioh.com/p/33f73e7c1040
+    name: SESS_NAME,
+    secret: 'mySecret',
+    resave: false, //resaves session after every change: https://morioh.com/p/33f73e7c1040
+    saveUninitialized: false, //saves uninitialized objects in session, when they are assigned to the session
+    cookie: {
+        maxAge: SESS_LIFETIME,
+        sameSite: true
+    }
 }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -84,7 +90,10 @@ app.use((req, res, next) => {
 /*var router = require('./Routes/router');
 
 app.use('/routes/router.js', router);*/
-
+const users = [
+    {id: 1, name: 'Alex', email: 'ax@gmail.com', password: 'secret'},
+    {id: 1, name: 'Some', email: 'some@gmail.com', password: 'secret'}
+]
 
 require('./Server/Controllers/passport/local');
 
@@ -137,7 +146,7 @@ app.get('/loginErrors', (req,res) => {
 });*/
 
 app.get('/myAccount',  (req, res) => {
-    User.findOne({email: 'yr@mail.dk'})
+    User.findOne({email: req.body.email})
     .then((user) => {
         if (user.online != true) {
             return res.status(401).send();
@@ -148,30 +157,42 @@ app.get('/myAccount',  (req, res) => {
             });
     }});
 });
+
+    /*
+    if (email && password) {
+        const user = users.find(
+            user => user.email === email && user.password === password
+        )
+        if (user) {
+            req.session.userId = user.id
+            return res.redirect('/myAccount')
+        }*/
 app.post('/login', (req, res) => {
     const { email, password } = req.body
-    console.log(email)
-    console.log(password)
     User.findOne({email: req.body.email})
-    //User.findOne({password: req.body.password})
     .then((user) => {
-        if (user) {    
-            user.online = true;
-            req.session.user = user
-            console.log(user)
+        if (user) {
+            user.email === email && user.password === password;    
+            user.online = true;     //vi ændrer online boolean til true
+            req.session.user = user //Cookie ID: bruger forbliver logget ind   
+            console.log(user)     //i løbet af sessionens maxAge = 2 timer 
             user.save((err, user) => {
                 if (err) {
                     throw err;
                 } else {
                     res.render('myAccount', {
                     user:user
-            });
+                    });
+                }});
+        }else{
+            res.redirect('/createAccount')
         }
     });
-}})});
+});                                    
+
 
 //Get route to match
-app.get('/likeUser/', (req,res) => {
+app.get('/likeUser/:id', (req,res) => {
     //User.findOne({email:req.params.email})
     User.findOne({email: 'isla@gmail.com'}) //modtager account
             .then((user) => {
@@ -193,32 +214,31 @@ app.get('/likeUser/', (req,res) => {
                 });
             });
 });   
-app.get('/showLike/:email', (req,res) => {
-    User.findOne({email:req.params.email})
-    .then((userRequest) => {
+app.get('/showLike/:id', (req,res) => {
+    User.findOne({_id:req.params.id})
+    .then((showLike) => {
         res.render('match/showLike', {
-            title: 'Like',
-            newFriend:userRequest
+            newFriend:showLike
         })
     })
 });
-//like back route
-app.get('/likeBack/:email', (req,res) => {
-    User.findOne({email: 'thomas@mail.dk'})
-    .populate('matches.match')
-    .then((user) => {
-        user.matches.filter((match) => {
-            if (match.email = 'thomas@mail.dk') {
-                match.matchedUser = true;
-                user.save() 
-                .then(() => {
-                    res.send('You have a new match! This user liked you too')
+//Like back -> MATCH route
+app.get('/likeBack/:id', (req,res) => { //specificerer User med generisk værdi, ID
+    User.findById({_id:req.user._id}) //finder den aktuelle bruger
+    .populate('matches.match') //vi populater denne brugers match array, for at få adgang til match objektets ID
+    .then((user) => { //den aktuelle bruger
+        user.matches.filter((match) => { //vi finder ét match i DB i User's match array
+            if (match._id = req.params._id) { //hvis dette match's ID = ID i URL
+                match.matchedUser = true; //så finder vi modtagerens match-array og laver match boolean om til true
+                user.save() //vi gemmer brugeren med save() metoden
+                .then(() => { //callback funktion sender teksten = MATCH
+                    res.send('You hve a new match! This user liked you too')
                 })
             }else {
-                console.log('Unable to')
+                console.log('Unable to like user')
             }
         })
-    }).catch((err) => {
+    }).catch((err) => { //vi fanger error
         console.log(err);
     })
 })
@@ -233,7 +253,7 @@ app.get('/myMatches', (req,res) => {
         }
     })
     .then((user) => {
-        console.log('yeehaw')
+        console.log('vi er nået til myMatches')
         res.render('matches/myMatches', {
             title: 'Matches',
             userMatches: user
