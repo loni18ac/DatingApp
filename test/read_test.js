@@ -1,11 +1,11 @@
 //Inde i read_user.js
 const assert = require('assert');
 //assertion er ikke inkluderet i Mocha, så derfor requires det installerede
-const User = require('../Server/Models/User');
+const userTestSchema = require('../usersTest');
 //importerer User model
 
 beforeEach(() => {
-    var user = new User({
+    var user = new userTestSchema({
         fullname: 'Latte Chokolade'
     });
     user.save()
@@ -16,7 +16,7 @@ describe('Read user details', () => {
 
     //Create test
     it('finds record in database with fullname, Latte Chokolade', (done) => {
-        User.findOne({fullname: 'Latte Chokolade'})
+        userTestSchema.findOne({fullname: 'Latte Chokolade'})
         .then(function(user) {
             assert(user.fullname === 'Latte Chokolade');
             done();

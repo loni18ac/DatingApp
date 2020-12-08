@@ -305,17 +305,28 @@ app.get('/testSession', (req, res) => {
 app.get('/potentialMatches', (req,res) => {
     User.find({},)
     .then((potentialMatches) => {
-        if (user.online != true) {
+       /* if (user.online != true) {
             return res.status(404).send() 
-        }else{
+        }else{*/
         res.render('potentialMatches', {
             title: 'PotentialMatches',
             potentialMatches:potentialMatches
         });
-    // }).catch((err) => {
-    //     console.log(err);
-    // });
-    }});
+     }).catch((err) => {
+        console.log(err);
+    });
+});
+
+app.get('/potentialPartners', (req,res) => {
+    User.find({},)
+    .then((potentialPartners) => {
+        res.render('potentialPartners', {
+            title: 'PotentialPartners',
+            potentialPartners:potentialPartners
+        })
+    }).catch((err) => {
+        console.log(err);
+    });
 });
 //like brugere route
 /*
