@@ -61,18 +61,19 @@
 }
 
 function ready() {
-    var removeMatchButtons = document.getElementsByClassName('btn-danger')
-    for (var i = 0; i < removeMatchButtons.length; i++) {
-        var button = removeMatchButtons[i]
-        button.addEventListener('click', removeMatch)
-    }
-
     var likeButtons = document.getElementsByClassName('like-user-button')
     for (var i = 0; i < likeButtons.length; i++) {
         var button = likeButtons[i]
         button.addEventListener('click', likeUserClicked)
 
     }
+    var removeMatchButtons = document.getElementsByClassName('btn-danger')
+    for (var i = 0; i < removeMatchButtons.length; i++) {
+        var button = removeMatchButtons[i]
+        button.addEventListener('click', removeMatch)
+    }
+
+    
     var dislikeButtons = document.getElementsByClassName('dislike-user-button')
     for (var i = 0; i < dislikeButtons.length; i++) {
         var button = dislikeButtons[i]
@@ -103,15 +104,8 @@ function likeUserClicked(event) {
 
 function likeUser(title) {
     var matchRow = document.createElement('div')
-    matchRow.classList.add('match-row')
+    matchRow.classList.add('match-row') //for at kunne tælle total matches
     var matchUsers = document.getElementsByClassName('match-users')[0]
-    var matchUserNames = matchUsers.getElementsByClassName('like-user-title')
-    for (var i = 0; i < matchUserNames.length; i++) {
-        if (matchUserNames[i].innerText == title) {
-            alert('This user has already been liked')
-            return
-        }
-    }
     var matchRowContents = `
         <div class="match-user match-column">
             <span class="match-user-title">${title}</span>
@@ -120,7 +114,7 @@ function likeUser(title) {
     matchRow.innerHTML = matchRowContents
     matchUsers.append(matchRow)
     matchRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeMatch)
-}
+}   //efter vi har tilføjet indholdet til match-rækken, muliggøres det her, at brugeren kan fjerne et match
 
 function matchTotal() {
     var matchUsersContainer = document.getElementsByClassName('match-users')[0]

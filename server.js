@@ -39,7 +39,7 @@ app.use(bodyParser.urlencoded({extended:true})) //vi vil kun have form data
 //vi tager altså værdien i keys-MongoDB, som er linket til MongoDB. 
 //hvis det virker, udskrives 'Connected'
 mongoose.connect(Keys.MongoDB, { useUnifiedTopology: true }, { useNewUrlParser: true }).then(() => {
-    console.log('Connected bla bla');
+    console.log('Connected to MongoDB');
 }).catch((err) => {
     console.log(err);
 })
@@ -117,7 +117,6 @@ app.post('/createdSuccessfully', (req,res) => {
             let success = [];
             success.push({text: 'Account was created successfully!'});
             res.render('home', {
-                title: 'Sign in',
                 success: success
             });
         }
@@ -138,7 +137,7 @@ app.get('/loginErrors', (req,res) => {
 });*/
 
 app.get('/myAccount',  (req, res) => {
-    User.findOne({email:'testPerson@mail.dk'})
+    User.findOne({email: 'yr@mail.dk'})
     .then((user) => {
         if (user.online != true) {
             return res.status(401).send();
@@ -170,7 +169,7 @@ app.post('/login', (req, res) => {
         }
     });
 }})});
-/*
+
 //Get route to match
 app.get('/likeUser/', (req,res) => {
     //User.findOne({email:req.params.email})
@@ -226,7 +225,7 @@ app.get('/likeBack/:email', (req,res) => {
 
 //My matches
 app.get('/myMatches', (req,res) => {
-    User.findOne({_id:'5fca0549a495ed6c0870ea11'})
+    User.findById({_id:req.user._id})
     .populate({
         path: "matches", //populate matches
         populate: {
@@ -240,7 +239,7 @@ app.get('/myMatches', (req,res) => {
             userMatches: user
         })
     })
-});*/
+});
         /*
             let newMatch = {
                 match: 's@gmail.com'
@@ -278,20 +277,21 @@ app.get('/deleteMatch/:id', requireLogin, (req, res) => {
     });
 });
 app.post('/updateProfile', (req, res) => {
-    User.findOne({email: 'testPerson@mail.dk'})
+    User.findOne({email: 'yr@mail.dk'})
     .then((user) => {
+        if (user.online != true) {
+        return res.status(404).send();
+     }else{
         user.about = req.body.about;
         user.save(() => {
             res.json("Your description has been updated, please go back and refresh the page");
-        });
-    });
+     })
+    }});
 });
 app.get('/deleteAccount', (req,res) => {
     User.deleteOne({email: req.body.email})
     .then(() => {
-        res.render('accountDeleted', {
-            title: 'Deleted'
-        });
+        res.render('accountDeleted');
     });
 })
 
@@ -305,13 +305,17 @@ app.get('/testSession', (req, res) => {
 app.get('/potentialMatches', (req,res) => {
     User.find({},)
     .then((potentialMatches) => {
+        if (user.online != true) {
+            return res.status(404).send() 
+        }else{
         res.render('potentialMatches', {
             title: 'PotentialMatches',
             potentialMatches:potentialMatches
-        })
-    }).catch((err) => {
-        console.log(err);
-    });
+        });
+    // }).catch((err) => {
+    //     console.log(err);
+    // });
+    }});
 });
 //like brugere route
 /*
@@ -328,7 +332,7 @@ app.get('/logout', (req, res) => {
     /*const { email, password } = req.body
     console.log(email)
     console.log(password)*/
-    User.findOne({email: 'testPerson@mail.dk'})
+    User.findOne({email: 'yr@mail.dk'})
     .then((user) => {
             user.online = false;
             req.session.destroy();

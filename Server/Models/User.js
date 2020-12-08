@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
 
+    _id: {
+        type: mongoose.Schema.Types.ObjectId
+    },
+
     fistname: {
         type: String
     },
@@ -29,20 +33,20 @@ const userSchema = new Schema({
     online: {
         type: Boolean,
         default: false
-    }, //vi sætter standard statusen til at brugeren ikke er online. 
-    //den skal sættes til true, når brugeren er online.
+    }, //Standard-status sættes til at brugeren ikke er online.  
+    //Når han logger ind, ændres status i controlleren til online ved: user.online = true. 
     password: {
         type: String
     },
     matches: [{
         match: {
-            type: Schema.Types.ObjectId,
-            ref: 'User'
+            type: Schema.Types.ObjectId, //path til at populate
+            ref: 'User' //det indlejrede array connectes med denne User model
     },
         matchedUser: {
             type: Boolean,
-            default: true
-        }
+            default: false //som default har den likede bruger, ikke liket tilbage
+        }                  //Ændres til true, når den likede bruger liker tilbage
      }]
 });
 /*
