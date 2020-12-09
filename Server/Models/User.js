@@ -45,24 +45,7 @@ const userSchema = new Schema({
         }                  //Ændres til true, når den likede bruger liker tilbage
      }]
 });
-/*
 
-module.exports.getUserById = function(id,callback)
-{
-  User.findById(id,callback);
-}*/
 module.exports = mongoose.model('User', userSchema);
 //userSchema har allerede nyt skema indkodet
 
-/*class User {
-    constructor(name, age, location) {
-    this.name = name;
-    this.age = age;
-    this.location = location;
-}
-}
-module.exports=User
-
-//Moderklassen User har attributterne navn, alder og lokation*/
-
-//test

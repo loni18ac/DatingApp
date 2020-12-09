@@ -10,8 +10,9 @@ mongoose.connection
 //Called hooks which runs before something.
 beforeEach((done) => {
     mongoose.connection.collections.userSchema(
-         //this function runs after the drop is completed
-        done()); //go ahead everything is done now.
+        done()); //go ahead, alt er done nu.
 });
+
+
 
 
