@@ -1,3 +1,4 @@
+//kilde: https://www.udemy.com/course/build-online-dating-website-from-scratch-till-deployment/learn/lecture/14191570#overview
 const express = require('express');
 const exphbs = require('express-handlebars');
 const Handlebars = require('handlebars');
@@ -61,7 +62,7 @@ app.use(session({
         sameSite: true
     }
 }));
-//Til senere brug:
+//Til senere brug (local strategy, passport):
 /*app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -94,8 +95,9 @@ app.get('/createAccount', ensureGuest, (req,res) => {
 });
 
 app.post('/createdSuccessfully', (req,res) => {
-    console.log(req.body); //body/formen er objektet, som vi får ind. Vi skal installere body.parser, for at få det som JSON format
-    var salt = bcrypt.genSaltSync(10);
+    console.log(req.body);  //body er objektet, som vi får ind. 
+                            //Vi skal installere body.parser, for at få det som JSON format
+    var salt = bcrypt.genSaltSync(10); //safety first - forebygger attack
     var hash = bcrypt.hashSync("B4c0/\/", salt);
     const newUser = {
         fullname: req.body.fullname,
@@ -109,7 +111,7 @@ app.post('/createdSuccessfully', (req,res) => {
             throw err;
         }
         if (user) {
-            let success = [];
+            let success = []; //hermed kan vi injecte data i .hbs-{{each}}
             success.push({text: 'Account was created successfully!'});
             res.render('home', {
                 success: success
@@ -117,10 +119,10 @@ app.post('/createdSuccessfully', (req,res) => {
         }
     })
 });
-//lav til JSON fil
+//Kunne være blevet lavet til løs JSON fil
 
 app.get('/myAccount',  (req, res) => {
-    User.findOne({email: 'd@mail.dk'})
+    User.findOne({email: 'testPerson@mail.dk'})
     .then((user) => {
         if (user.online != true) {
             return res.status(401).send();
@@ -134,7 +136,7 @@ app.get('/myAccount',  (req, res) => {
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body
-    User.findOne({email: req.body.email})
+    User.findOne({email: 'testPerson@mail.dk'})
     .then((user) => {
         if (user) {
             user.email === email && user.password === password;    
