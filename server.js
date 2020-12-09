@@ -19,16 +19,18 @@ const Keys = require('./database/keys');
 //vi loader helpers (de to funktioner) og hvis user ikke er logget ind, viser vi ikke profilen
 const {requireLogin, ensureGuest} = require('./helpers/auth');
 
-const passport = require('passport');
-//const cookieParser = require('cookie-parser');
+//const passport = require('passport');
+
 const session = require('express-session');
 //vi loader express session module med require og assigner den til session
 // Load models
 const User = require('./Server/Models/User.js');
 //const Match = require('./Server/Models/match');
 //referer til Account collection, altså der hvor vi sætter datatypen
-const flash = require('connect-flash');
-
+//const flash = require('connect-flash');
+//flash til senere brug
+const SESS_NAME = 'DatingCookie'
+const SESS_LIFETIME = 1000 * 60 * 60 * 2
 const bcrypt = require('bcryptjs');
 
 app.use(bodyParser.json());
@@ -46,8 +48,6 @@ mongoose.connect(Keys.MongoDB, { useUnifiedTopology: true }, { useNewUrlParser: 
 app.engine('handlebars', exphbs({handlebars: allowInsecurePrototypeAccess(Handlebars)}));
 app.set('view engine', 'handlebars');
 
-const SESS_NAME = 'DatingCookie'
-const SESS_LIFETIME = 1000 * 60 * 60 * 2
 
 //brugeren er logget ind så længe sessionen varer vba. cookie id
 //app.use(cookieParser());
@@ -61,8 +61,8 @@ app.use(session({
         sameSite: true
     }
 }));
-
-app.use(passport.initialize());
+//Til senere brug:
+/*app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req,res, next) =>{
@@ -70,30 +70,16 @@ app.use((req,res, next) =>{
     res.locals.error_msg = req.flash('error_msg');
     res.locals.error = req.flash('error');
     next();
-})
+})*/
 //vi laver ny success message for local variable success msg. Så hvis successfuld login = success_msg
 //vi bruger flash method øverst og har nu stored disse messages i variablen flash
-//er brugerens login oplysninger korrekte?
 
-//vi sætter express static folder for at serve js og css files
-app.use(express.static('public'));
 //vi laver user til et globalt objekt, så det kan bruges af alle funtioner
-//access control: brugeren skal logge ind for at kunne logge ud.
 //vi har dermed access til user objektet fra alle templates
-
 app.use((req, res, next) => {
     res.locals.user = req.user || null;
     next();
 });
-
-
-/*var router = require('./Routes/router');
-
-app.use('/routes/router.js', router);*/
-const users = [
-    {id: 1, name: 'Alex', email: 'ax@gmail.com', password: 'secret'},
-    {id: 1, name: 'Some', email: 'some@gmail.com', password: 'secret'}
-]
 
 require('./Server/Controllers/passport/local');
 
@@ -132,21 +118,9 @@ app.post('/createdSuccessfully', (req,res) => {
     })
 });
 //lav til JSON fil
-/*
-app.post('/login', passport.authenticate('local', {
-    successRedirect:'/myAccount',
-    failureRedirect: '/loginErrors'
-}));
-app.get('/loginErrors', (req,res) => {
-    let errors = [];
-    errors.push({text:'User not found or password/email incorrect'});
-    res.render('myAccount', {
-        errors:errors
-    });
-});*/
 
 app.get('/myAccount',  (req, res) => {
-    User.findOne({email: req.body.email})
+    User.findOne({email: 'd@mail.dk'})
     .then((user) => {
         if (user.online != true) {
             return res.status(401).send();
@@ -158,15 +132,6 @@ app.get('/myAccount',  (req, res) => {
     }});
 });
 
-    /*
-    if (email && password) {
-        const user = users.find(
-            user => user.email === email && user.password === password
-        )
-        if (user) {
-            req.session.userId = user.id
-            return res.redirect('/myAccount')
-        }*/
 app.post('/login', (req, res) => {
     const { email, password } = req.body
     User.findOne({email: req.body.email})
@@ -260,34 +225,7 @@ app.get('/myMatches', (req,res) => {
         })
     })
 });
-        /*
-            let newMatch = {
-                match: 's@gmail.com'
-            }
-            user.matches.push(newMatch)
-            user.save((err,user) => {
-                if (err) {
-                    throw err;
-                }
-                if (user) {
-                    res.json('You have liked this user')
-                }
-            })
-        })
-    const newMatch = {
-        sender: req.user_id,
-        receiver: req.params.id,
-        senderSent: true
-    }
-    new Match(newMatch).save((err, match) => {
-        if (err) {
-            throw err;
-        }
-        if (match) {
-        res.redirect(`/userProfile/${req.params.id}`);
-        }
-    })
-})*/
+    
 
 //Get route til delete match
 app.get('/deleteMatch/:id', requireLogin, (req, res) => {
@@ -309,11 +247,13 @@ app.post('/updateProfile', (req, res) => {
     }});
 });
 app.get('/deleteAccount', (req,res) => {
-    User.deleteOne({email: req.body.email})
+    User.deleteOne({email: 'd@mail.dk'})
     .then(() => {
         res.render('accountDeleted');
+    }).catch((err) => {
+        console.log(err);
     });
-})
+});
 
 // FJERN SENERE!
 app.get('/testSession', (req, res) => {
@@ -326,7 +266,7 @@ app.get('/potentialMatches', (req,res) => {
     User.find({},)
     .then((potentialMatches) => {
        /* if (user.online != true) {
-            return res.status(404).send() 
+            return res.status(404).send() //udkommenteret da err=user kan ikke læses
         }else{*/
         res.render('potentialMatches', {
             title: 'PotentialMatches',
@@ -382,18 +322,3 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
  console.log(`Server running on http://localhost:${port}`)});
 
-
-/*
-/login controller nedenfor
-function loginController(req, res) {
-    //Normalt vil man kigge om password og brugernavn stemmer, men det springer vi over
-    //normalt vil man gemme secret key et andet sted. 
-    //Her laves en token, som dør om en time (no access)
-    const token = jwt.sign({user}, 'my_secret', { expiresIn: '1h' })
-    res.json({
-        token: token
-    })
-    
-
-
-module.exports = loginController*/
