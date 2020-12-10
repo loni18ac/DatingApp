@@ -1,3 +1,5 @@
+//DENNE FIL BRUGES IKKE I EKSAMENSPROJEKTET. TIL SENERE BRUG
+/*
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../../Models/User');
@@ -40,4 +42,4 @@ passport.use(new LocalStrategy({
             console.log(err);
         })
     })
- }));      
+ }));      */

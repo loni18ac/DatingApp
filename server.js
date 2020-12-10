@@ -6,7 +6,7 @@ const Handlebars = require('handlebars');
 const app = express();
 //server sættes til at kalde på express
 const port = 7000;
-//vi vælger port 4000, vi kunne også vælge fx 5000
+//vi vælger port 7000, vi kunne også vælge fx 5000
 const {allowInsecurePrototypeAccess} = require('@handlebars/allow-prototype-access');
 
 const bodyParser = require('body-parser');
@@ -24,10 +24,9 @@ const {requireLogin, ensureGuest} = require('./helpers/auth');
 
 const session = require('express-session');
 //vi loader express session module med require og assigner den til session
-// Load models
+// Loader models - data
 const User = require('./Server/Models/User.js');
-//const Match = require('./Server/Models/match');
-//referer til Account collection, altså der hvor vi sætter datatypen
+
 //const flash = require('connect-flash');
 //flash til senere brug
 const SESS_NAME = 'DatingCookie'
@@ -228,14 +227,7 @@ app.get('/myMatches', (req,res) => {
     })
 });
     
-
-//Get route til delete match
-app.get('/deleteMatch/:id', requireLogin, (req, res) => {
-    Match.deleteOne({receiver:req.params.id,sender:req.user._id})
-    .then(() => {
-        res.redirect(`/userProfile/${req.params.id}`);
-    });
-});
+//overvejes at bruge PUT request
 app.post('/updateProfile', (req, res) => {
     User.findOne({email: 'yr@mail.dk'})
     .then((user) => {
@@ -248,8 +240,9 @@ app.post('/updateProfile', (req, res) => {
      })
     }});
 });
+//overvejer at bruge DELETE request
 app.get('/deleteAccount', (req,res) => {
-    User.deleteOne({email: 'd@mail.dk'})
+    User.deleteOne({email: 'testPerson@mail.dk'})
     .then(() => {
         res.render('accountDeleted');
     }).catch((err) => {
@@ -257,12 +250,6 @@ app.get('/deleteAccount', (req,res) => {
     });
 });
 
-// FJERN SENERE!
-app.get('/testSession', (req, res) => {
-    console.log("req.session.user")
-    console.log(req.session.user)
-    console.log("req.session.user")
-})
 
 app.get('/potentialMatches', (req,res) => {
     User.find({},)
