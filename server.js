@@ -136,7 +136,7 @@ app.get('/myAccount',  (req, res) => {
 
 app.post('/login', (req, res) => {
     const { email, password } = req.body
-    User.findOne({email: 'testPerson@mail.dk'})
+    User.findOne({email: req.body.email})
     .then((user) => {
         if (user) {
             user.email === email && user.password === password;    
